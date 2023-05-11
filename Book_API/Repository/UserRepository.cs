@@ -39,7 +39,7 @@ namespace Book_API.Repository
             {
                 return null;
             }
-            LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
+            LoginResponseDTO loginResponseDTO = new LoginResponseDTO() { User=user};
             return loginResponseDTO;
 
 

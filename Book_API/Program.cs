@@ -1,4 +1,6 @@
 using Book_API.Data;
+using Book_API.Repository.IRepository;
+using Book_API.Repository;
 using Books_API;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +13,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+//builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
 
 // Add services to the container.
 

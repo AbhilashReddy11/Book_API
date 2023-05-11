@@ -2,7 +2,7 @@
 {
     public class LoginResponseDTO
     {
-        public UserDTO User { get; set; }
-        public string Role { get; set; }
+        public LocalUser User { get; set; }
+      //  public string Role { get; set; }
     }
 }
