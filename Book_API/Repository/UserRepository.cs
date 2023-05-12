@@ -3,20 +3,24 @@ using Book_API.Data;
 using Book_API.Models;
 using Book_API.Models.DTO;
 using Book_API.Repository.IRepository;
-
-
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Book_API.Repository
 {
-    public class UserRepository : Repository<UserDTO>, IUserRepository
+    public class UserRepository : Repository<LocalUser>, IUserRepository
     {
         private readonly ApplicationDbContext _db;
 
         private readonly IMapper _mapper;
-        public UserRepository(ApplicationDbContext db, IMapper mapper) : base(db)
+        private string secretKey;
+        public UserRepository(ApplicationDbContext db, IMapper mapper, IConfiguration configuration) : base(db)
         {
             _db = db;
             _mapper = mapper;
+            secretKey = configuration.GetValue<string>("ApiSettings:Secret");
         }
 
       
@@ -37,9 +41,36 @@ namespace Book_API.Repository
             && u.Password == loginRequestDTO.Password);
             if (user == null)
             {
-                return null;
+                return new LoginResponseDTO()
+                {
+                    Token = "",
+                    User = null
+                };
             }
-            LoginResponseDTO loginResponseDTO = new LoginResponseDTO() { User=user};
+            //LoginResponseDTO loginResponseDTO = new LoginResponseDTO() { User=user};
+            //return loginResponseDTO;
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(secretKey);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.UserName.ToString()),
+                    new Claim(ClaimTypes.Role, user.Role)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
+            {
+                Token = tokenHandler.WriteToken(token),
+                //  User = user
+                User= _mapper.Map<LocalUser>(user),
+
+            };
             return loginResponseDTO;
 
 
@@ -59,7 +90,7 @@ namespace Book_API.Repository
             user.Password = "";
             return user;
         }
-        public async Task<LocalUser> Edit(LocalUser entity)
+        public async Task<LocalUser> UpdateAsync(LocalUser entity)
         {
             _db.LocalUsers.Update(entity);
             await _db.SaveChangesAsync();

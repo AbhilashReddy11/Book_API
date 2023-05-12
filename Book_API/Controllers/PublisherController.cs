@@ -6,6 +6,7 @@ using Book_API.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Book_API.Controllers
 {
@@ -71,8 +72,8 @@ namespace Book_API.Controllers
 
                 }
 
-                var author = await _dbPublisher.GetAsync(u => u.PID == id);
-                if (author == null)
+                var publisher = await _dbPublisher.GetAsync(u => u.PID == id);
+                if (publisher == null)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -81,7 +82,7 @@ namespace Book_API.Controllers
 
                 }
 
-                _response.Result = _mapper.Map<Author>(author);
+                _response.Result = _mapper.Map<Publisher>(publisher);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -134,7 +135,7 @@ namespace Book_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> DeletePublisher(int id)
         {
             try

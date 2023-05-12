@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Book_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230511095833_all")]
+    [Migration("20230512153519_all")]
     partial class all
     {
         /// <inheritdoc />
@@ -72,6 +72,10 @@ namespace Book_API.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("AuthorID");
+
+                    b.HasIndex("PublisherID");
+
                     b.ToTable("Books");
                 });
 
@@ -123,6 +127,25 @@ namespace Book_API.Migrations
                     b.HasKey("PID");
 
                     b.ToTable("Publishers");
+                });
+
+            modelBuilder.Entity("Book_API.Models.Book", b =>
+                {
+                    b.HasOne("Book_API.Models.Author", "author")
+                        .WithMany()
+                        .HasForeignKey("AuthorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Book_API.Models.Publisher", "publisher")
+                        .WithMany()
+                        .HasForeignKey("PublisherID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("author");
+
+                    b.Navigation("publisher");
                 });
 #pragma warning restore 612, 618
         }

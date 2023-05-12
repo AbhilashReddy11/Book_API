@@ -3,7 +3,7 @@ using Book_API.Data;
 using Book_API.Models;
 using Book_API.Models.DTO;
 using Book_API.Repository.IRepository;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -53,7 +53,7 @@ namespace Book_API.Controllers
 
         }
         [HttpGet("{id:int}",  Name = "GetAuthor")]
-        // [Authorize(Roles = "admin")]
+         
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -136,7 +136,8 @@ namespace Book_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
+       // [Authorize]
         public async Task<ActionResult<APIResponse>> DeleteAuthor(int id)
         {
             try
@@ -169,6 +170,7 @@ namespace Book_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //  [Authorize(Roles = "admin")]
+       
         public async Task<ActionResult<APIResponse>> UpdateAuthor(int id, [FromBody] AuthorUpdateDTO updateDTO)
         {
             try

@@ -25,7 +25,12 @@ namespace Books_API
             CreateMap<Book, BookDTO>().ReverseMap();
             CreateMap<BookDTO, BookCreateDTO>().ReverseMap();
             CreateMap<BookDTO, BookUpdateDTO>().ReverseMap();
+            CreateMap<Book, BookCreateDTO>().ReverseMap();
+            CreateMap<Book, BookUpdateDTO>().ReverseMap();
+
+
             CreateMap<LocalUser, UserDTO>().ReverseMap();
+            CreateMap<LocalUser, UserUpdateDTO>().ReverseMap();
             CreateMap<UserDTO, UserUpdateDTO>().ReverseMap();
            // CreateMap<AuthorDTO, AuthorUpdateDTO>().ReverseMap();
 

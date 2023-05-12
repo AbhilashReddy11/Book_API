@@ -21,9 +21,10 @@ namespace Book_API.Repository
             await SaveAsync();
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true, string? includeProperties = null)
-        {
-            IQueryable<T> query = dbSet;
+        public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true) {
+           // Expression<Func<T, bool>> filter = null, bool tracked = true, string? includeProperties = null
+        
+                IQueryable<T> query = dbSet;
             if (!tracked)
             {
                 query = query.AsNoTracking();
@@ -45,13 +46,13 @@ namespace Book_API.Repository
         }
 
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, string? includeProperties = null, int pageSize = 0, int pageNumber = 1)
+        public async Task<List<T>> GetAllAsync()
         {
             IQueryable<T> query = dbSet;
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
+            //Expression<Func<T, bool>> filter = null, string? includeProperties = null
+            //{
+            //    query = query.Where(filter);
+            //}
 
             //if (includeProperties != null)
             //{
