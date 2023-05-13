@@ -105,12 +105,12 @@ namespace Book_API.Controllers
         // [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> CreateAuthor([FromBody] AuthorCreateDTO createDTO)
         {
-            var emailValidationResult = new EmailAddressAttribute().IsValid(createDTO.Email);
-            if (!emailValidationResult)
-            {
-                ModelState.AddModelError("Email", "Email is not valid.");
-                return BadRequest(ModelState);
-            }
+            //var emailValidationResult = new EmailAddressAttribute().IsValid(createDTO.Email);
+            //if (!emailValidationResult)
+            //{
+            //    ModelState.AddModelError("Email", "Email is not valid.");
+            //    return BadRequest(ModelState);
+            //}
             try
             {
                 if (await _dbAuthor.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
