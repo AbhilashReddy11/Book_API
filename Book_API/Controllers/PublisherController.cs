@@ -68,8 +68,6 @@ namespace Book_API.Controllers
 
 
                 }
-
-                // _response.Result = _mapper.Map<Publisher>(publisher);
                 _response.Result = publisher;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -154,7 +152,7 @@ namespace Book_API.Controllers
                     return BadRequest();
                 }
 
-                // Publisher model = _mapper.Map<Publisher>(updateDTO);
+                
                 Publisher model = updateDTO;
 
 

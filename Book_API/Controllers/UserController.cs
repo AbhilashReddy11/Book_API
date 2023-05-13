@@ -11,12 +11,12 @@ namespace Book_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HomeController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepo;
         private readonly APIResponse _response;
         private readonly IMapper _mapper;
-        public HomeController(IUserRepository userRepo, IMapper mapper)
+        public UserController(IUserRepository userRepo, IMapper mapper)
         {
             _response = new();
             _userRepo = userRepo;
@@ -39,11 +39,6 @@ namespace Book_API.Controllers
             _response.Result = loginResponse;
             return Ok(_response);
         }
-
-
-
-
-
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegistrationRequestDTO model)
         {

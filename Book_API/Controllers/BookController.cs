@@ -38,8 +38,6 @@ namespace Book_API.Controllers
             try
             {
                 IEnumerable<Book> bookList = await _dbBook.GetAllAsync(includeProperties: "author,publisher");
-
-                //_response.Result = _mapper.Map<List<BookDTO>>(bookList);
                 _response.Result = bookList;
                 _response.StatusCode = HttpStatusCode.OK;
 
@@ -76,8 +74,6 @@ namespace Book_API.Controllers
 
 
                 }
-
-                //    _response.Result = _mapper.Map<Book>(book);
                 _response.Result = book;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
