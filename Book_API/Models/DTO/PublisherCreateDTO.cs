@@ -6,6 +6,8 @@ namespace Book_API.Models.DTO
     {
         [Required]
         public string Name { get; set; }
+        [Required]
+        [EmailAddress(ErrorMessage = "Email is not valid.")]
         public string Email { get; set; }
     }
 }
