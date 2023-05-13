@@ -77,7 +77,7 @@ namespace Book_API.Controllers
             {
                 IEnumerable<LocalUser> usersList = await _userRepo.GetAllAsync();
 
-                _response.Result = _mapper.Map<List<LocalUser>>(usersList);
+                _response.Result = usersList;
                 _response.StatusCode = HttpStatusCode.OK;
 
             }
@@ -91,14 +91,6 @@ namespace Book_API.Controllers
 
         }
         [HttpGet("{id:int}", Name = "GetUser")]
-        // [Authorize(Roles = "admin")]
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-
-
         public async Task<ActionResult<APIResponse>> GetUser(int id)
         {
             try
@@ -122,7 +114,7 @@ namespace Book_API.Controllers
 
                 }
 
-                _response.Result = _mapper.Map<LocalUser>(user);
+                _response.Result = user;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -137,10 +129,6 @@ namespace Book_API.Controllers
         
 
         [HttpDelete("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> DeleteUser(int id)
         {
             try
@@ -170,9 +158,6 @@ namespace Book_API.Controllers
 
         }
         [HttpPut("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //  [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> UpdateUser(int id, [FromBody] LocalUser updateDTO)
         {
             try
@@ -182,7 +167,7 @@ namespace Book_API.Controllers
                     return BadRequest();
                 }
 
-                LocalUser model = _mapper.Map<LocalUser>(updateDTO);
+                LocalUser model = updateDTO;
 
 
                 await _userRepo.UpdateAsync(model);

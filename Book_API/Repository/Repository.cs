@@ -24,8 +24,7 @@ namespace Book_API.Repository
 
         public async Task<T> GetAsync(Expression<Func<T, bool>>? filter = null,bool tracked = true, string? includeProperties = null) 
         {
-           // Expression<Func<T, bool>> filter = null, bool tracked = true, string? includeProperties = null
-        
+         
                 IQueryable<T> query = dbSet;
             if (!tracked)
             {

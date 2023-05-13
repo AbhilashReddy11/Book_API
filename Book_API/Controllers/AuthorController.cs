@@ -4,6 +4,7 @@ using Book_API.Models;
 using Book_API.Models.DTO;
 using Book_API.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -21,7 +22,7 @@ namespace Book_API.Controllers
         private readonly IAuthorRepository _dbAuthor;
         private readonly IMapper _mapper;
         protected APIResponse _response;
-       // private readonly ApplicationDbContext _db;
+      
 
 
         public AuthorController(IAuthorRepository dbAuthor, IMapper mapper,ApplicationDbContext db)
@@ -29,21 +30,22 @@ namespace Book_API.Controllers
             _dbAuthor = dbAuthor;
             _mapper = mapper;
             _response = new();
-         //   _db = db;
+         
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        
         public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
-          //  public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAuthors()
+        
         {
             try
             {
                 IEnumerable<Author> authorList = await _dbAuthor.GetAllAsync();
+                _response.Result = authorList;
 
-                _response.Result = _mapper.Map<List<Author>>(authorList);
-                _response.StatusCode = HttpStatusCode.OK;
-                
+                //_response.Result = _mapper.Map<List<Author>>(authorList);
+                //_response.StatusCode = HttpStatusCode.OK;
+
             }
             catch (Exception ex)
             {
@@ -55,13 +57,6 @@ namespace Book_API.Controllers
 
         }
         [HttpGet("{id:int}",  Name = "GetAuthor")]
-         
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-      
-
 
         public async Task<ActionResult<APIResponse>> GetAuthor(int id)
         {
@@ -84,8 +79,8 @@ namespace Book_API.Controllers
 
 
                 }
-
-                _response.Result = _mapper.Map<Author>(author);
+                _response.Result = author;
+                // _response.Result = _mapper.Map<Author>(author);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -98,19 +93,8 @@ namespace Book_API.Controllers
 
         }
         [HttpPost]
-
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        // [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> CreateAuthor([FromBody] AuthorCreateDTO createDTO)
         {
-            //var emailValidationResult = new EmailAddressAttribute().IsValid(createDTO.Email);
-            //if (!emailValidationResult)
-            //{
-            //    ModelState.AddModelError("Email", "Email is not valid.");
-            //    return BadRequest(ModelState);
-            //}
             try
             {
                 if (await _dbAuthor.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
@@ -142,11 +126,7 @@ namespace Book_API.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "admin")]
-       // [Authorize]
         public async Task<ActionResult<APIResponse>> DeleteAuthor(int id)
         {
             try
@@ -176,20 +156,22 @@ namespace Book_API.Controllers
 
         }
         [HttpPut("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //  [Authorize(Roles = "admin")]
-       
-        public async Task<ActionResult<APIResponse>> UpdateAuthor(int id, [FromBody] Author updateDTO)
+      public async Task<ActionResult<APIResponse>> UpdateAuthor(int id, [FromBody] Author updateDTO)
         {
             try
             {
+                //if (await _dbAuthor.GetAsync(u => u.Name.ToLower() == updateDTO.Name.ToLower()) != null)
+                //{
+                //    ModelState.AddModelError("ErrorMessages", "Author already exists!");
+                //    return BadRequest(ModelState);
+                //}
                 if (updateDTO == null || id != updateDTO.AID)
                 {
                     return BadRequest();
                 }
 
-                Author model = _mapper.Map<Author>(updateDTO);
+                //  Author model = _mapper.Map<Author>(updateDTO);
+                Author model = updateDTO;
 
 
                 await _dbAuthor.UpdateAsync(model);

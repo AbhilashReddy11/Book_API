@@ -17,25 +17,20 @@ namespace Book_API.Controllers
         private readonly IPublisherRepository _dbPublisher;
         private readonly IMapper _mapper;
         protected APIResponse _response;
-        // private readonly ApplicationDbContext _db;
-
-
-        public PublisherController(IPublisherRepository dbPublisher, IMapper mapper)
+      public PublisherController(IPublisherRepository dbPublisher, IMapper mapper)
         {
             _dbPublisher = dbPublisher;
             _mapper = mapper;
             _response = new();
-            //   _db = db;
+           
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Publisher>>> GetPublishers()
         {
             try
             {
                 IEnumerable<Publisher> publisherList = await _dbPublisher.GetAllAsync();
-                //IEnumerable<PublisherDTO> authorList = await _dbPublisher.GetAllAsync();
 
                 _response.Result = _mapper.Map<List<Publisher>>(publisherList);
                 _response.StatusCode = HttpStatusCode.OK;
@@ -51,14 +46,6 @@ namespace Book_API.Controllers
 
         }
         [HttpGet("{id:int}", Name = "GetPublisher")]
-        // [Authorize(Roles = "admin")]
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-
-
         public async Task<ActionResult<APIResponse>> GetPublisher(int id)
         {
             try
@@ -82,7 +69,8 @@ namespace Book_API.Controllers
 
                 }
 
-                _response.Result = _mapper.Map<Publisher>(publisher);
+                // _response.Result = _mapper.Map<Publisher>(publisher);
+                _response.Result = publisher;
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -95,11 +83,6 @@ namespace Book_API.Controllers
 
         }
         [HttpPost]
-
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        // [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> CreatePublisher([FromBody] PublisherCreateDTO createDTO)
         {
             try
@@ -132,9 +115,6 @@ namespace Book_API.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> DeletePublisher(int id)
         {
@@ -165,9 +145,6 @@ namespace Book_API.Controllers
 
         }
         [HttpPut("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //  [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> UpdateAuthor(int id, [FromBody] Publisher updateDTO)
         {
             try
@@ -177,8 +154,8 @@ namespace Book_API.Controllers
                     return BadRequest();
                 }
 
-                Publisher model = _mapper.Map<Publisher>(updateDTO);
-              //  PublisherDTO model = _mapper.Map<PublisherDTO>(updateDTO);
+                // Publisher model = _mapper.Map<Publisher>(updateDTO);
+                Publisher model = updateDTO;
 
 
                 await _dbPublisher.UpdateAsync(model);
