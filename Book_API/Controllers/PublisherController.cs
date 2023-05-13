@@ -30,14 +30,14 @@ namespace Book_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<PublisherDTO>>> GetAuthors()
+        public async Task<ActionResult<IEnumerable<Publisher>>> GetPublishers()
         {
             try
             {
                 IEnumerable<Publisher> publisherList = await _dbPublisher.GetAllAsync();
                 //IEnumerable<PublisherDTO> authorList = await _dbPublisher.GetAllAsync();
 
-                _response.Result = _mapper.Map<List<PublisherDTO>>(publisherList);
+                _response.Result = _mapper.Map<List<Publisher>>(publisherList);
                 _response.StatusCode = HttpStatusCode.OK;
 
             }
@@ -168,7 +168,7 @@ namespace Book_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //  [Authorize(Roles = "admin")]
-        public async Task<ActionResult<APIResponse>> UpdateAuthor(int id, [FromBody] PublisherUpdateDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateAuthor(int id, [FromBody] Publisher updateDTO)
         {
             try
             {

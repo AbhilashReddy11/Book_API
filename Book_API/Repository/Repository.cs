@@ -1,6 +1,7 @@
 ﻿using Book_API.Data;
 using Book_API.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace Book_API.Repository
@@ -21,46 +22,38 @@ namespace Book_API.Repository
             await SaveAsync();
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true) {
+        public async Task<T> GetAsync(Expression<Func<T, bool>>? filter = null,bool tracked = true, string? includeProperties = null) {
            // Expression<Func<T, bool>> filter = null, bool tracked = true, string? includeProperties = null
         
                 IQueryable<T> query = dbSet;
-            if (!tracked)
-            {
-                query = query.AsNoTracking();
-            }
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
 
 
-            //if (includeProperties != null)
-            //{
-            //    foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            //    {
-            //        query = query.Include(includeProp);
-            //    }
-            //}
+            if (includeProperties != null)
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return await query.FirstOrDefaultAsync();
         }
 
 
-        public async Task<List<T>> GetAllAsync()
+        public async Task<List<T>> GetAllAsync(string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
-            //Expression<Func<T, bool>> filter = null, string? includeProperties = null
+          
             //{
             //    query = query.Where(filter);
             //}
 
-            //if (includeProperties != null)
-            //{
-            //    foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            //    {
-            //        query = query.Include(includeProp);
-            //    }
-            //}
+            if (includeProperties != null)
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return await query.ToListAsync();
         }
 

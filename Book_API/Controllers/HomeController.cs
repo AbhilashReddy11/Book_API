@@ -71,13 +71,13 @@ namespace Book_API.Controllers
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<LocalUser>>> GetUsers()
         {
             try
             {
                 IEnumerable<LocalUser> usersList = await _userRepo.GetAllAsync();
 
-                _response.Result = _mapper.Map<List<UserDTO>>(usersList);
+                _response.Result = _mapper.Map<List<LocalUser>>(usersList);
                 _response.StatusCode = HttpStatusCode.OK;
 
             }
@@ -122,7 +122,7 @@ namespace Book_API.Controllers
 
                 }
 
-                _response.Result = _mapper.Map<UserDTO>(user);
+                _response.Result = _mapper.Map<LocalUser>(user);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -173,7 +173,7 @@ namespace Book_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //  [Authorize(Roles = "admin")]
-        public async Task<ActionResult<APIResponse>> UpdateUser(int id, [FromBody] UserUpdateDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateUser(int id, [FromBody] LocalUser updateDTO)
         {
             try
             {

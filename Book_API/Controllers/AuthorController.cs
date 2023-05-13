@@ -6,6 +6,7 @@ using Book_API.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 namespace Book_API.Controllers
@@ -33,13 +34,14 @@ namespace Book_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAuthors()
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
+          //  public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAuthors()
         {
             try
             {
                 IEnumerable<Author> authorList = await _dbAuthor.GetAllAsync();
 
-                _response.Result = _mapper.Map<List<AuthorDTO>>(authorList);
+                _response.Result = _mapper.Map<List<Author>>(authorList);
                 _response.StatusCode = HttpStatusCode.OK;
                 
             }
@@ -103,6 +105,12 @@ namespace Book_API.Controllers
         // [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> CreateAuthor([FromBody] AuthorCreateDTO createDTO)
         {
+            //var emailValidationResult = new EmailAddressAttribute().IsValid(createDTO.Email);
+            //if (!emailValidationResult)
+            //{
+            //    ModelState.AddModelError("Email", "Email is not valid.");
+            //    return BadRequest(ModelState);
+            //}
             try
             {
                 if (await _dbAuthor.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
@@ -110,6 +118,7 @@ namespace Book_API.Controllers
                     ModelState.AddModelError("ErrorMessages", "Author already exists!");
                     return BadRequest(ModelState);
                 }
+               
                 if (createDTO == null)
                 {
                     return BadRequest();
@@ -171,7 +180,7 @@ namespace Book_API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //  [Authorize(Roles = "admin")]
        
-        public async Task<ActionResult<APIResponse>> UpdateAuthor(int id, [FromBody] AuthorUpdateDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateAuthor(int id, [FromBody] Author updateDTO)
         {
             try
             {

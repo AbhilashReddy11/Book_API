@@ -6,6 +6,7 @@ namespace Book_API.Models.DTO
     {
         [Required]
         public string Name { get; set; }
+        [Required]
         public string Email { get; set; }
     }
 }

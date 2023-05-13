@@ -10,7 +10,11 @@ namespace Book_API.Models
         public int AID { get; set; }
         [Required]
         public string Name { get; set; }
+
+      //  [Required]
+        [EmailAddress(ErrorMessage = "Email is not valid.")]
         public string Email { get; set; }
+       
         
     }
 }

@@ -33,11 +33,11 @@ namespace Book_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks()
         {
             try
             {
-                IEnumerable<Book> bookList = await _dbBook.GetAllAsync();
+                IEnumerable<Book> bookList = await _dbBook.GetAllAsync(includeProperties: "author,publisher");
 
                 _response.Result = _mapper.Map<List<BookDTO>>(bookList);
                 _response.StatusCode = HttpStatusCode.OK;
@@ -74,7 +74,7 @@ namespace Book_API.Controllers
 
                 }
 
-                var book = await _dbBook.GetAsync(u => u.ID == id);
+                var book = await _dbBook.GetAsync(u => u.ID == id, includeProperties : "author,publisher");
                 if (book == null)
                 {
                     _response.IsSuccess = false;
@@ -147,7 +147,7 @@ namespace Book_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Roles = "admin")]
+      //  [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> DeleteBook(int id)
         {
             try
@@ -180,7 +180,7 @@ namespace Book_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //  [Authorize(Roles = "admin")]
-        public async Task<ActionResult<APIResponse>> UpdateBook(int id, [FromBody] BookUpdateDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateBook(int id, [FromBody] BookDTO updateDTO)
         {
             try
             {

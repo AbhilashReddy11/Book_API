@@ -1,5 +1,6 @@
 ﻿using Book_API.Data;
 using Book_API.Models;
+using Book_API.Models.DTO;
 using Book_API.Repository.IRepository;
 
 namespace Book_API.Repository
